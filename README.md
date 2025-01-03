@@ -1,1 +1,1 @@
-It changes the file extensions.
+It changes the image file extensions.
