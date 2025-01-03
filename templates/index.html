@@ -63,11 +63,11 @@
 
       <div class="mb-3">
         <label for="formFile" class="form-label">Put your file here...!</label>
-        <input class="form-control" type="file" id="formFile">
+        <input class="form-control" type="file" name="file" id="formFile">
       </div>
       <div class="mb-3">
         <div>
-          <select class="form-select" aria-label="Default select example">
+          <select name="operation" class="form-select" aria-label="Default select example">
             <option selected>Select an operation</option>
             <option value="cpng">convert to png</option>
             <option value="cgrey">convert to Greyscale</option>
@@ -77,7 +77,7 @@
           <label for="floatingSelect">Select an Editing Operation</label>
         </div>
       </div>
-      <button type="button" class="btn btn-success">Submit</button>
+      <button type="submit" class="btn btn-success">Submit</button>
 
     </form>
   </div>
