@@ -10,16 +10,39 @@ UPLOAD_FOLDER = 'uploads'
 ALLOWED_EXTENSIONS = {'webp', 'png', 'jpg', 'jpeg', 'gif'}
 
 app = Flask(__name__)
+app.secret_key = 'super secret key'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-def proceesImage(filename, operation):
     # Process the image
+def processImage(filename, operation):
     print(f'The operation is {operation} and the file is {filename}')
+    img = cv2.imread(f'uploads/{filename}')
+    match operation:
+        case "cgrey":
+            imgProcessed = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+            new_filename = f'static/{filename}'
+            cv2.imwrite(f'static/{filename}', imgProcessed)
+            return new_filename
+        case "cwebp":
+            new_filename = f'static/{filename.split('.')[0]}.webp'
+            cv2.imwrite(new_filename, img)
 
+            return new_filename
+        case "cjpg":
+            new_filename = f'static/{filename.split('.')[0]}.jpg'
+            cv2.imwrite(new_filename, img)
+
+            return new_filename
+        case "cpng":
+            new_filename = f'static/{filename.split('.')[0]}.png'
+            cv2.imwrite(new_filename, img)
+
+            return new_filename
+    pass
 @app.route("/")
 def home():
     return render_template("index.html")
@@ -51,7 +74,8 @@ def edit():
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            proceesImage(filename, operation)
+            new = processImage(filename, operation)
+            flash(f"File {filename} proccessed successfully. <a href='/{new}' target='_blank'> Download here</a>") 
 
             return render_template("index.html")
 
